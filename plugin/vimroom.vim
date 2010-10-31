@@ -48,8 +48,10 @@ function! <SID>Vimroomize()
     if s:is_the_screen_wide_enough()
         let s:sidebar = s:sidebar_size()
         exec( "leftabove " . s:sidebar . "vsplit new" )
+        set noma
         wincmd l
         exec( "rightbelow " . s:sidebar . "vsplit new" )
+        set noma
         wincmd h
         set wrap
         set linebreak
