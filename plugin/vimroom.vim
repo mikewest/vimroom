@@ -44,7 +44,11 @@ endif
 let s:minwidth = g:vimroom_width + ( g:vimroom_min_sidebar_width * 2 )
 
 " Save the current color scheme for reset later
-let s:scheme   = g:colors_name
+if exists( "g:colors_name" )
+    let s:scheme = g:colors_name
+else
+    let s:scheme = ""
+endif
 
 " We're currently in nonvimroomized state
 let s:active   = 0
