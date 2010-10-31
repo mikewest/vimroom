@@ -54,6 +54,7 @@ function! <SID>Vimroomize()
         set wrap
         set linebreak
         exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
+        exec( "hi NonText ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
         set fillchars+=vert:\ 
     endif
 endfunction
