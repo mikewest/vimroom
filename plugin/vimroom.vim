@@ -65,7 +65,11 @@ function! <SID>Vimroomize()
     if s:active == 1
         let s:active = 0
         only
-        exec( "colorscheme " . s:scheme ) 
+        if s:scheme != ""
+            exec( "colorscheme " . s:scheme ) 
+        else
+            hi clear
+        endif
     else
         if s:is_the_screen_wide_enough()
             let s:active = 1
