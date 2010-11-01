@@ -35,6 +35,14 @@ if !exists( "g:vimroom_background" )
     let g:vimroom_background = "black"
 endif
 
+" The "scrolloff" value: how many lines should be kept visible above and below
+" the cursor at all times?  Defaults to 999 (which centers your cursor in the 
+" active window).
+if !exists( "g:vimroom_scrolloff" )
+    let g:vimroom_scrolloff = 999
+endif
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Code
 "
@@ -44,11 +52,16 @@ endif
 let s:minwidth = g:vimroom_width + ( g:vimroom_min_sidebar_width * 2 )
 
 " Save the current color scheme for reset later
+let s:scheme = ""
 if exists( "g:colors_name" )
     let s:scheme = g:colors_name
-else
-    let s:scheme = ""
 endif
+
+" Save the current scrolloff value for reset later
+let s:save_scrolloff = ""
+if exists( "&scrolloff" )
+    let s:save_scrolloff = &scrolloff
+end
 
 " We're currently in nonvimroomized state
 let s:active   = 0
@@ -70,18 +83,30 @@ function! <SID>Vimroomize()
         else
             hi clear
         endif
+        if s:save_scrolloff != ""
+            exec( "set scrolloff=" . s:save_scrolloff )
+        endif
+        set nowrap
+        set nolinebreak
     else
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
+            " Create the left sidebar
             exec( "silent leftabove " . s:sidebar . "vsplit new" )
             set noma
             wincmd l
+            " Create the right sidebar
             exec( "silent rightbelow " . s:sidebar . "vsplit new" )
             set noma
             wincmd h
+            " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
+            if s:save_scrolloff != ""
+                exec( "set scrolloff=".g:vimroom_scrolloff )
+            endif
+            " Hide distracting visual elements
             exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
             exec( "hi NonText ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
             exec( "hi StatusLine ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
