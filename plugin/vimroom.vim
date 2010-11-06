@@ -74,7 +74,7 @@ function! s:sidebar_size()
     return ( winwidth( winnr() ) - g:vimroom_width - 2 ) / 2
 endfunction
 
-function! <SID>Vimroomize()
+function! <SID>VimroomToggle()
     if s:active == 1
         let s:active = 0
         only
@@ -116,10 +116,13 @@ function! <SID>Vimroomize()
     endif
 endfunction
 
-" Create a mapping for the `Vimroomize` function
-noremap <silent> <Plug>Vimroomize    :call <SID>Vimroomize()<CR>
+" Create a mapping for the `VimroomToggle` function
+noremap <silent> <Plug>VimroomToggle    :call <SID>VimroomToggle()<CR>
+
+" Create a `VimroomToggle` command:
+command -nargs=0 VimroomToggle call <SID>VimroomToggle()
 
 " If no mapping exists, map it to `<Leader>V`.
-if !hasmapto( '<Plug>Vimroomize' )
-    nmap <silent> <Leader>V <Plug>Vimroomize
+if !hasmapto( '<Plug>VimroomToggle' )
+    nmap <silent> <Leader>V <Plug>VimroomToggle
 endif
