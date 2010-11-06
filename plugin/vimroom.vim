@@ -30,6 +30,11 @@ if !exists( "g:vimroom_min_sidebar_width" )
     let g:vimroom_min_sidebar_width = 5
 endif
 
+" The sidebar height.  Defaults to 3:
+if !exists( "g:vimroom_sidebar_height" )
+    let g:vimroom_sidebar_height = 3
+endif
+
 " The background color.  Defaults to "black"
 if !exists( "g:vimroom_background" )
     let g:vimroom_background = "black"
@@ -113,6 +118,16 @@ function! <SID>VimroomToggle()
             exec( "silent rightbelow " . s:sidebar . "vsplit new" )
             set noma
             wincmd h
+            if g:vimroom_sidebar_height
+                " Create the top sidebar
+                exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
+                set noma 
+                wincmd j
+                " Create the bottom sidebar
+                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
+                set noma
+                wincmd k
+            endif
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
