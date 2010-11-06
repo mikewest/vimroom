@@ -63,6 +63,12 @@ if exists( "&scrolloff" )
     let s:save_scrolloff = &scrolloff
 end
 
+" Save the current `laststatus` value for reset later
+let s:save_laststatus = ""
+if exists( "&laststatus" )
+    let s:save_laststatus = &laststatus
+endif
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -86,12 +92,19 @@ function! <SID>VimroomToggle()
         if s:save_scrolloff != ""
             exec( "set scrolloff=" . s:save_scrolloff )
         endif
+        if s:save_laststatus != ""
+            exec( "set laststatus=" . s:save_laststatus )
+        endif
         set nowrap
         set nolinebreak
     else
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
+            " Turn off status bar
+            if s:save_laststatus != ""
+                set laststatus=0
+            endif
             " Create the left sidebar
             exec( "silent leftabove " . s:sidebar . "vsplit new" )
             set noma
