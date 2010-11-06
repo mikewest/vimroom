@@ -88,18 +88,22 @@ endfunction
 function! <SID>VimroomToggle()
     if s:active == 1
         let s:active = 0
+        " Close all other windows
         only
+        " Reset color scheme (or clear new colors, if no scheme is set)
         if s:scheme != ""
             exec( "colorscheme " . s:scheme ) 
         else
             hi clear
         endif
+        " Reset `scrolloff` and `laststatus`
         if s:save_scrolloff != ""
             exec( "set scrolloff=" . s:save_scrolloff )
         endif
         if s:save_laststatus != ""
             exec( "set laststatus=" . s:save_laststatus )
         endif
+        " Remove wrapping and linebreaks
         set nowrap
         set nolinebreak
     else
