@@ -154,6 +154,14 @@ function! <SID>VimroomToggle()
             if s:save_scrolloff != ""
                 exec( "set scrolloff=".g:vimroom_scrolloff )
             endif
+
+            " Setup navigation over "display lines", not "logical lines" if
+            " mappings for the navigation keys don't already exist.
+            map <unique> <silent> <Up> g<Up>
+            map <unique> <silent> <Down> g<Down>
+            map <unique> <silent> k gk
+            map <unique> <silent> j gj
+
             " Hide distracting visual elements
             exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
             exec( "hi NonText ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
