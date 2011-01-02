@@ -74,6 +74,12 @@ if exists( "&laststatus" )
     let s:save_laststatus = &laststatus
 endif
 
+" Save the current `textwidth` value for reset later
+let s:save_textwidth = ""
+if exists( "&textwidth" )
+    let s:save_textwidth = &textwidth
+endif
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -102,6 +108,9 @@ function! <SID>VimroomToggle()
         endif
         if s:save_laststatus != ""
             exec( "set laststatus=" . s:save_laststatus )
+        endif
+        if s:save_textwidth != ""
+            exec( "set textwidth=" . s:save_textwidth )
         endif
         " Remove wrapping and linebreaks
         set nowrap
@@ -139,6 +148,9 @@ function! <SID>VimroomToggle()
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
+            if s:save_textwidth != ""
+                exec( "set textwidth=".g:vimroom_width )
+            endif
             if s:save_scrolloff != ""
                 exec( "set scrolloff=".g:vimroom_scrolloff )
             endif
