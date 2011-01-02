@@ -157,10 +157,12 @@ function! <SID>VimroomToggle()
 
             " Setup navigation over "display lines", not "logical lines" if
             " mappings for the navigation keys don't already exist.
-            map <unique> <silent> <Up> g<Up>
-            map <unique> <silent> <Down> g<Down>
-            map <unique> <silent> k gk
-            map <unique> <silent> j gj
+            noremap     <unique> <silent> <Up> g<Up>
+            noremap     <unique> <silent> <Down> g<Down>
+            noremap     <unique> <silent> k gk
+            noremap     <unique> <silent> j gj
+            inoremap    <unique> <silent> <Up> <C-o>g<Up>
+            inoremap    <unique> <silent> <Down> <C-o>g<Down>
 
             " Hide distracting visual elements
             exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
