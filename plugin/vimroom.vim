@@ -4,7 +4,7 @@
 "             splitting the current window in such a way as to center a column
 "             of user-specified width, wrap the text, and break lines.
 "Maintainer:  Mike West <mike@mikewest.org>
-"Version:     0.1
+"Version:     0.7
 "Last Change: 2010-10-31
 "License:     BSD <../LICENSE.markdown>
 "==============================================================================
