@@ -68,6 +68,9 @@ let s:scheme = ""
 if exists( "g:colors_name" )
     let s:scheme = g:colors_name
 endif
+if exists( "&t_mr" )
+    let s:save_t_mr = &t_mr
+end
 
 " Save the current scrolloff value for reset later
 let s:save_scrolloff = ""
@@ -108,6 +111,9 @@ function! <SID>VimroomToggle()
             exec( "colorscheme " . s:scheme ) 
         else
             hi clear
+        endif
+        if s:save_t_mr != ""
+            exec( "set t_mr=" .s:save_t_mr )
         endif
         " Reset `scrolloff` and `laststatus`
         if s:save_scrolloff != ""
@@ -182,6 +188,7 @@ function! <SID>VimroomToggle()
             exec( "hi NonText ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
             exec( "hi StatusLine ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
             exec( "hi StatusLineNC ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
+            set t_mr=""
             set fillchars+=vert:\ 
         endif
     endif
