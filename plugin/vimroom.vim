@@ -209,5 +209,5 @@ command -nargs=0 VimroomToggle call <SID>VimroomToggle()
 
 " If no mapping exists, map it to `<Leader>V`.
 if !hasmapto( '<Plug>VimroomToggle' )
-    nmap <Leader>v <Plug>VimroomToggle
+    nmap <Leader>V <Plug>VimroomToggle
 endif
