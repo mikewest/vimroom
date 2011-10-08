@@ -47,6 +47,13 @@ if !exists( "g:vimroom_scrolloff" )
     let g:vimroom_scrolloff = 999
 endif
 
+" Should Vimroom map navigational keys (`<Up>`, `<Down>`, `j`, `k`) to navigate
+" "display" lines instead of "logical" lines (which makes it much simpler to deal
+" with wrapped lines). Defaults to `1` (on). Set to `0` if you'd prefer not to
+" run the mappings.
+if !exists( "g:vimroom_navigation_keys" )
+    let g:vimroom_navigation_keys = 1
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Code
@@ -157,12 +164,18 @@ function! <SID>VimroomToggle()
 
             " Setup navigation over "display lines", not "logical lines" if
             " mappings for the navigation keys don't already exist.
-            noremap     <unique> <silent> <Up> g<Up>
-            noremap     <unique> <silent> <Down> g<Down>
-            noremap     <unique> <silent> k gk
-            noremap     <unique> <silent> j gj
-            inoremap    <unique> <silent> <Up> <C-o>g<Up>
-            inoremap    <unique> <silent> <Down> <C-o>g<Down>
+            if g:vimroom_navigation_keys
+                try
+                    noremap     <unique> <silent> <Up> g<Up>
+                    noremap     <unique> <silent> <Down> g<Down>
+                    noremap     <unique> <silent> k gk
+                    noremap     <unique> <silent> j gj
+                    inoremap    <unique> <silent> <Up> <C-o>g<Up>
+                    inoremap    <unique> <silent> <Down> <C-o>g<Down>
+                catch /E227:/
+                    echo "Navigational key mappings already exist."
+                endtry
+            endif
 
             " Hide distracting visual elements
             exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
