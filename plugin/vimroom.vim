@@ -22,7 +22,7 @@ let g:loaded_vimroom_plugin = 1
 
 " The desired column width.  Defaults to 80:
 if !exists( "g:vimroom_width" )
-    let g:vimroom_width = 80
+    let g:vimroom_width = 82
 endif
 
 " The minimum sidebar size.  Defaults to 5:
@@ -128,6 +128,7 @@ function! <SID>VimroomToggle()
         " Remove wrapping and linebreaks
         set nowrap
         set nolinebreak
+        set colorcolumn=0
     else
         if s:is_the_screen_wide_enough()
             let s:active = 1
@@ -138,11 +139,15 @@ function! <SID>VimroomToggle()
             endif
             " Create the left sidebar
             exec( "silent leftabove " . s:sidebar . "vsplit new" )
+            set nu
+            set nonu
             set noma
             set nocursorline
             wincmd l
             " Create the right sidebar
             exec( "silent rightbelow " . s:sidebar . "vsplit new" )
+            set nu
+            set nonu
             set noma
             set nocursorline
             wincmd h
@@ -161,6 +166,8 @@ function! <SID>VimroomToggle()
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
+            set colorcolumn=79
+            hi ColorColumn ctermbg=0
             if s:save_textwidth != ""
                 exec( "set textwidth=".g:vimroom_width )
             endif
@@ -202,5 +209,5 @@ command -nargs=0 VimroomToggle call <SID>VimroomToggle()
 
 " If no mapping exists, map it to `<Leader>V`.
 if !hasmapto( '<Plug>VimroomToggle' )
-    nmap <silent> <Leader>V <Plug>VimroomToggle
+    nmap <Leader>v <Plug>VimroomToggle
 endif
