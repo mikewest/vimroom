@@ -140,22 +140,26 @@ function! <SID>VimroomToggle()
             exec( "silent leftabove " . s:sidebar . "vsplit new" )
             set noma
             set nocursorline
+            set nonumber
             wincmd l
             " Create the right sidebar
             exec( "silent rightbelow " . s:sidebar . "vsplit new" )
             set noma
             set nocursorline
+            set nonumber
             wincmd h
             if g:vimroom_sidebar_height
                 " Create the top sidebar
                 exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
                 set noma 
                 set nocursorline
+                set nonumber
                 wincmd j
                 " Create the bottom sidebar
                 exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
                 set noma
                 set nocursorline
+                set nonumber
                 wincmd k
             endif
             " Setup wrapping, line breaking, and push the cursor down
