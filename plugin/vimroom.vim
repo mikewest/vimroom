@@ -90,7 +90,7 @@ if exists('&textwidth')
 endif
 
 " Save the current `numberwidth` value for reset later
-let s:save_textwidth = ''
+let s:save_numberwidth = ''
 if exists('&numberwidth')
   let s:save_numberwidth = &numberwidth
 endif
