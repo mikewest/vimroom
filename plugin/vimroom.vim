@@ -229,14 +229,17 @@ function! <SID>VimroomToggle()
 
             " Hide distracting visual elements
             if has('gui_running')
-                let l:highlightcolor = "guifg=" . g:vimroom_guibackground . " guibg=" . g:vimroom_guibackground
+                let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
+                let l:highlightfgbgcolor = "guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor
             else
-                let l:highlightcolor = "ctermfg=" . g:vimroom_ctermbackground . " ctermbg=" . g:vimroom_ctermbackground
+                let l:highlightbgcolor = "ctermbg=" . g:vimroom_guibackground
+                let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " " . l:highlightbgcolor
             endif
-            exec( "hi VertSplit " . l:highlightcolor )
-            exec( "hi NonText " . l:highlightcolor )
-            exec( "hi StatusLine " . l:highlightcolor )
-            exec( "hi StatusLineNC " . l:highlightcolor )
+            exec( "hi Normal " . l:highlightbgcolor )
+            exec( "hi VertSplit " . l:highlightfgbgcolor )
+            exec( "hi NonText " . l:highlightfgbgcolor )
+            exec( "hi StatusLine " . l:highlightfgbgcolor )
+            exec( "hi StatusLineNC " . l:highlightfgbgcolor )
             set t_mr=""
             set fillchars+=vert:\ 
         endif
