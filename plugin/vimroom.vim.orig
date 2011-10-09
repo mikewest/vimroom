@@ -107,20 +107,49 @@ function! s:sidebar_size()
 endfunction
 
 function! <SID>VimroomToggle()
+<<<<<<< HEAD
   if s:active == 1
     let s:active = 0
     " Close all other windows
-    wincmd j
-    close
-    wincmd k
-    close
-    wincmd l
-    close
-    wincmd h
-    close
+    only
     " Reset color scheme (or clear new colors, if no scheme is set)
     if s:scheme != ''
       exec('colorscheme ' . s:scheme)
+=======
+    if s:active == 1
+        let s:active = 0
+        " Close all other split windows
+        wincmd j
+        close
+        wincmd k
+        close
+        wincmd l
+        close
+        wincmd h
+        close
+        " Reset color scheme (or clear new colors, if no scheme is set)
+        if s:scheme != ""
+            exec( "colorscheme " . s:scheme ) 
+        else
+            hi clear
+        endif
+        if s:save_t_mr != ""
+            exec( "set t_mr=" .s:save_t_mr )
+        endif
+        " Reset `scrolloff` and `laststatus`
+        if s:save_scrolloff != ""
+            exec( "set scrolloff=" . s:save_scrolloff )
+        endif
+        if s:save_laststatus != ""
+            exec( "set laststatus=" . s:save_laststatus )
+        endif
+        if s:save_textwidth != ""
+            exec( "set textwidth=" . s:save_textwidth )
+        endif
+        " Remove wrapping and linebreaks
+        set nowrap
+        set nolinebreak
+>>>>>>> a53b642278c445f816785792f126a89bc787bc77
     else
       hi clear
     endif
