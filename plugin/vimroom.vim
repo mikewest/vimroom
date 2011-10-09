@@ -105,14 +105,18 @@ function! <SID>VimroomToggle()
     if s:active == 1
         let s:active = 0
         " Close all other split windows
-        wincmd j
-        close
-        wincmd k
-        close
-        wincmd l
-        close
-        wincmd h
-        close
+        if g:vimroom_sidebar_height
+            wincmd j
+            close
+            wincmd k
+            close
+        endif
+        if g:vimroom_min_sidebar_width
+            wincmd l
+            close
+            wincmd h
+            close
+        endif
         " Reset color scheme (or clear new colors, if no scheme is set)
         if s:scheme != ""
             exec( "colorscheme " . s:scheme ) 
@@ -143,18 +147,20 @@ function! <SID>VimroomToggle()
             if s:save_laststatus != ""
                 set laststatus=0
             endif
-            " Create the left sidebar
-            exec( "silent leftabove " . s:sidebar . "vsplit new" )
-            set noma
-            set nocursorline
-            set nonumber
-            wincmd l
-            " Create the right sidebar
-            exec( "silent rightbelow " . s:sidebar . "vsplit new" )
-            set noma
-            set nocursorline
-            set nonumber
-            wincmd h
+            if g:vimroom_min_sidebar_width
+                " Create the left sidebar
+                exec( "silent leftabove " . s:sidebar . "vsplit new" )
+                set noma
+                set nocursorline
+                set nonumber
+                wincmd l
+                " Create the right sidebar
+                exec( "silent rightbelow " . s:sidebar . "vsplit new" )
+                set noma
+                set nocursorline
+                set nonumber
+                wincmd h
+            endif
             if g:vimroom_sidebar_height
                 " Create the top sidebar
                 exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
