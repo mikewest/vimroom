@@ -35,9 +35,14 @@ if !exists( "g:vimroom_sidebar_height" )
     let g:vimroom_sidebar_height = 3
 endif
 
-" The background color.  Defaults to "black"
-if !exists( "g:vimroom_background" )
-    let g:vimroom_background = "black"
+" The GUI background color.  Defaults to "black"
+if !exists( "g:vimroom_guibackground" )
+    let g:vimroom_guibackground = "black"
+endif
+
+" The cterm background color.  Defaults to "bg"
+if !exists( "g:vimroom_ctermbackground" )
+    let g:vimroom_ctermbackground = "bg"
 endif
 
 " The "scrolloff" value: how many lines should be kept visible above and below
@@ -223,10 +228,18 @@ function! <SID>VimroomToggle()
             endif
 
             " Hide distracting visual elements
-            exec( "hi VertSplit ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
-            exec( "hi NonText ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
-            exec( "hi StatusLine ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
-            exec( "hi StatusLineNC ctermbg=" . g:vimroom_background . " ctermfg=" . g:vimroom_background . " guifg=" . g:vimroom_background . " guibg=" . g:vimroom_background )
+            if has('gui_running')
+                let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
+                let l:highlightfgbgcolor = "guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor
+            else
+                let l:highlightbgcolor = "ctermbg=" . g:vimroom_guibackground
+                let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " " . l:highlightbgcolor
+            endif
+            exec( "hi Normal " . l:highlightbgcolor )
+            exec( "hi VertSplit " . l:highlightfgbgcolor )
+            exec( "hi NonText " . l:highlightfgbgcolor )
+            exec( "hi StatusLine " . l:highlightfgbgcolor )
+            exec( "hi StatusLineNC " . l:highlightfgbgcolor )
             set t_mr=""
             set fillchars+=vert:\ 
         endif
