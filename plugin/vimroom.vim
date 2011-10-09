@@ -162,7 +162,7 @@ function! <SID>VimroomToggle()
       " Create the left sidebar
       exec('silent leftabove ' . s:sidebar . 'vsplit new')
       " If we use "relativenumber", we must change it to "number" first, 
-      " then we could close it.
+      " then we could disable it.
       set nu
       set nonu
       setlocal noma
