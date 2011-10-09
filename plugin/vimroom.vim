@@ -89,12 +89,6 @@ if exists('&textwidth')
   let s:save_textwidth = &textwidth
 endif
 
-" Save the current `colorcolumn` value for reset later
-let s:save_cc = ''
-if exists('&colorcolumn')
-  let s:save_cc = &colorcolumn
-endif
-
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -137,9 +131,6 @@ function! <SID>VimroomToggle()
     if s:save_textwidth != ''
       exec('set textwidth=' . s:save_textwidth)
     endif
-    if s:save_cc != ''
-      exec('set colorcolumn='. s:save_cc)
-    endif
     " Remove wrapping and linebreaks
     set nowrap
     set nolinebreak
@@ -151,9 +142,6 @@ function! <SID>VimroomToggle()
       if s:save_laststatus != ''
         set laststatus=0
       endif
-      " Use colorcolumn as window fence
-      set colorcolumn=79
-      hi ColorColumn ctermbg=0
       " Create the left sidebar
       exec('silent leftabove ' . s:sidebar . 'vsplit new')
       " If we use "relativenumber", we must change it to "number" first, 
@@ -173,12 +161,12 @@ function! <SID>VimroomToggle()
       if g:vimroom_sidebar_height
         " Create the top sidebar
         exec('silent leftabove ' . g:vimroom_sidebar_height . 'split new')
-        set noma
+        setlocal noma
         set nocursorline
         wincmd j
         " Create the bottom sidebar
         exec('silent rightbelow ' . g:vimroom_sidebar_height . 'split new')
-        set noma
+        setlocal noma
         set nocursorline
         wincmd k
       endif
