@@ -105,12 +105,6 @@ if exists ( "&relativenumber" )
     let s:save_relativenumber = &relativenumber
 endif
 
-" Save the current `numberwidth` value for reset later
-let s:save_numberwidth = ''
-if exists('&numberwidth')
-  let s:save_numberwidth = &numberwidth
-endif
-
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -120,6 +114,41 @@ endfunction
 
 function! s:sidebar_size()
     return ( winwidth( winnr() ) - g:vimroom_width - 2 ) / 2
+endfunction
+
+" Save current buffer name
+let b:vimroom_bufname = expand("%:t")
+" Close padding buffer if we quit current buffer
+autocmd BufHidden <buffer> bw | call s:close_padding()
+
+function! s:close_padding()
+  " Save buffer list
+  redir => buflist
+  silent ls!
+  redir END
+
+  let has_other_buf = 0
+
+  " Is there other buffer open?
+  for buf in split(buflist, "\n")
+    if match(buf, '_RoomPadding') == -1
+      let has_other_buf = 1
+      break
+    endif
+  endfor
+
+  if has_other_buf
+    " If there is other buffer existing,
+    " we close padding buffer first.
+    bd RoomPadding
+    " Initialize environment for other buffer
+    let b:vimroom_bufname = expand("%:t")
+    let s:active = 0
+    autocmd BufHidden <buffer> bw | call s:close_padding()
+  else
+    " Otherwise, we just quit vim
+    qa
+  endif
 endfunction
 
 function! <SID>VimroomToggle()
@@ -157,9 +186,6 @@ function! <SID>VimroomToggle()
         if s:save_textwidth != ""
             exec( "set textwidth=" . s:save_textwidth )
         endif
-        if s:save_numberwidth != ''
-            exec('set numberwidth=' . s:save_numberwidth)
-        endif
         if s:save_number != 0
             set number
         endif
@@ -173,24 +199,20 @@ function! <SID>VimroomToggle()
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
-            " Set numberwidth
-            if s:save_numberwidth != ''
-                set numberwidth=1
-            endif
             " Turn off status bar
             if s:save_laststatus != ""
                 setlocal laststatus=0
             endif
             if g:vimroom_min_sidebar_width
                 " Create the left sidebar
-                exec( "silent leftabove " . s:sidebar . "vsplit new" )
+                exec( "silent leftabove " . s:sidebar . "vsplit _RoomPadding" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
                 setlocal norelativenumber
                 wincmd l
                 " Create the right sidebar
-                exec( "silent rightbelow " . s:sidebar . "vsplit new" )
+                exec( "silent rightbelow " . s:sidebar . "vsplit _RoomPadding" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
@@ -199,14 +221,14 @@ function! <SID>VimroomToggle()
             endif
             if g:vimroom_sidebar_height
                 " Create the top sidebar
-                exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
+                exec( "silent leftabove " . g:vimroom_sidebar_height . "split _RoomPadding" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
                 setlocal norelativenumber
                 wincmd j
                 " Create the bottom sidebar
-                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
+                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split _RoomPadding" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
@@ -245,7 +267,7 @@ function! <SID>VimroomToggle()
                 let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
                 let l:highlightfgbgcolor = "guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor
             else
-                let l:highlightbgcolor = "ctermbg=" . g:vimroom_guibackground
+                let l:highlightbgcolor = "ctermbg=" . g:vimroom_ctermbackground
                 let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " " . l:highlightbgcolor
             endif
             exec( "hi Normal " . l:highlightbgcolor )
