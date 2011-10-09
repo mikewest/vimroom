@@ -19,9 +19,9 @@ if exists('g:loaded_vimroom_plugin')
 endif
 let g:loaded_vimroom_plugin = 1
 
-" The desired column width. Defaults to 80:
+" The desired column width. Defaults to 82:
 if !exists('g:vimroom_width')
-  let g:vimroom_width = 80
+  let g:vimroom_width = 82
 endif
 
 " The minimum sidebar size. Defaults to 5:
