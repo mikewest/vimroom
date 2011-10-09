@@ -160,14 +160,14 @@ function! <SID>VimroomToggle()
       " then we could close it.
       set nu
       set nonu
-      set noma
+      setlocal noma
       set nocursorline
       wincmd l
       " Create the right sidebar
       exec('silent rightbelow ' . s:sidebar . 'vsplit new')
       set nu
       set nonu
-      set noma
+      setlocal noma
       set nocursorline
       wincmd h
       if g:vimroom_sidebar_height
