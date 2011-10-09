@@ -161,38 +161,38 @@ function! <SID>VimroomToggle()
             let s:sidebar = s:sidebar_size()
             " Turn off status bar
             if s:save_laststatus != ""
-                set laststatus=0
+                setlocal laststatus=0
             endif
             if g:vimroom_min_sidebar_width
                 " Create the left sidebar
                 exec( "silent leftabove " . s:sidebar . "vsplit new" )
-                set noma
-                set nocursorline
-                set nonumber
-                set norelativenumber
+                setlocal noma
+                setlocal nocursorline
+                setlocal nonumber
+                setlocal norelativenumber
                 wincmd l
                 " Create the right sidebar
                 exec( "silent rightbelow " . s:sidebar . "vsplit new" )
-                set noma
-                set nocursorline
-                set nonumber
-                set norelativenumber
+                setlocal noma
+                setlocal nocursorline
+                setlocal nonumber
+                setlocal norelativenumber
                 wincmd h
             endif
             if g:vimroom_sidebar_height
                 " Create the top sidebar
                 exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
-                set noma 
-                set nocursorline
-                set nonumber
-                set norelativenumber
+                setlocal noma
+                setlocal nocursorline
+                setlocal nonumber
+                setlocal norelativenumber
                 wincmd j
                 " Create the bottom sidebar
                 exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
-                set noma
-                set nocursorline
-                set nonumber
-                set norelativenumber
+                setlocal noma
+                setlocal nocursorline
+                setlocal nonumber
+                setlocal norelativenumber
                 wincmd k
             endif
             " Setup wrapping, line breaking, and push the cursor down
