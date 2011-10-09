@@ -104,14 +104,18 @@ function! <SID>VimroomToggle()
   if s:active == 1
     let s:active = 0
     " Close all other windows
-    wincmd j
-    close
-    wincmd k
-    close
-    wincmd l
-    close
-    wincmd h
-    close
+    if g:vimroom_sidebar_height
+      wincmd j
+      close
+      wincmd k
+      close
+    endif
+    if g:vimroom_min_sidebar_width
+      wincmd l
+      close
+      wincmd h
+      close
+    endif
     " Reset color scheme (or clear new colors, if no scheme is set)
     if s:scheme != ''
       exec('colorscheme ' . s:scheme)
@@ -197,11 +201,13 @@ function! <SID>VimroomToggle()
 
       " Hide distracting visual elements
       if has('gui_running')
+        exec('hi LineNr guibg=' . g:vimroom_background)
         exec('hi VertSplit guibg=' . g:vimroom_background . ' guifg=' . g:vimroom_background)
         exec('hi NonText guibg=' . g:vimroom_background . ' guifg=' . g:vimroom_background)
         exec('hi StatusLine guibg=' . g:vimroom_background . ' guifg=' . g:vimroom_background)
         exec('hi StatusLineNC guibg=' . g:vimroom_background . ' guifg=' . g:vimroom_background)
       else
+        exec('hi LineNr ctermbg=' . g:vimroom_background)
         exec('hi VertSplit ctermbg=' . g:vimroom_background . ' ctermfg=' . g:vimroom_background)
         exec('hi NonText ctermbg=' . g:vimroom_background . ' ctermfg=' . g:vimroom_background)
         exec('hi StatusLine ctermbg=' . g:vimroom_background . ' ctermfg=' . g:vimroom_background)
