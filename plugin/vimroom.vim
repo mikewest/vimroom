@@ -104,8 +104,15 @@ endfunction
 function! <SID>VimroomToggle()
     if s:active == 1
         let s:active = 0
-        " Close all other windows
-        only
+        " Close all other split windows
+        wincmd j
+        close
+        wincmd k
+        close
+        wincmd l
+        close
+        wincmd h
+        close
         " Reset color scheme (or clear new colors, if no scheme is set)
         if s:scheme != ""
             exec( "colorscheme " . s:scheme ) 
