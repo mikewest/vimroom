@@ -105,6 +105,12 @@ if exists ( "&relativenumber" )
     let s:save_relativenumber = &relativenumber
 endif
 
+" Save the current `numberwidth` value for reset later
+let s:save_numberwidth = ''
+if exists('&numberwidth')
+  let s:save_numberwidth = &numberwidth
+endif
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -151,6 +157,9 @@ function! <SID>VimroomToggle()
         if s:save_textwidth != ""
             exec( "set textwidth=" . s:save_textwidth )
         endif
+        if s:save_numberwidth != ''
+            exec('set numberwidth=' . s:save_numberwidth)
+        endif
         if s:save_number != 0
             set number
         endif
@@ -164,6 +173,10 @@ function! <SID>VimroomToggle()
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
+            " Set numberwidth
+            if s:save_numberwidth != ''
+                set numberwidth=1
+            endif
             " Turn off status bar
             if s:save_laststatus != ""
                 setlocal laststatus=0
