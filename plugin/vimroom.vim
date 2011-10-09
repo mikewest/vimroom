@@ -90,6 +90,16 @@ if exists( "&textwidth" )
     let s:save_textwidth = &textwidth
 endif
 
+" Save the current `number` and `relativenumber` values for reset later
+let s:save_number = 0
+let s:save_relativenumber = 0
+if exists( "&number" )
+    let s:save_number = &number
+endif
+if exists ( "&relativenumber" )
+    let s:save_relativenumber = &relativenumber
+endif
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -136,6 +146,12 @@ function! <SID>VimroomToggle()
         if s:save_textwidth != ""
             exec( "set textwidth=" . s:save_textwidth )
         endif
+        if s:save_number != 0
+            set number
+        endif
+        if s:save_relativenumber != 0
+            set relativenumber
+        endif
         " Remove wrapping and linebreaks
         set nowrap
         set nolinebreak
@@ -153,12 +169,14 @@ function! <SID>VimroomToggle()
                 set noma
                 set nocursorline
                 set nonumber
+                set norelativenumber
                 wincmd l
                 " Create the right sidebar
                 exec( "silent rightbelow " . s:sidebar . "vsplit new" )
                 set noma
                 set nocursorline
                 set nonumber
+                set norelativenumber
                 wincmd h
             endif
             if g:vimroom_sidebar_height
@@ -167,17 +185,21 @@ function! <SID>VimroomToggle()
                 set noma 
                 set nocursorline
                 set nonumber
+                set norelativenumber
                 wincmd j
                 " Create the bottom sidebar
                 exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
                 set noma
                 set nocursorline
                 set nonumber
+                set norelativenumber
                 wincmd k
             endif
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
+            set nonumber
+            set norelativenumber
             if s:save_textwidth != ""
                 exec( "set textwidth=".g:vimroom_width )
             endif
