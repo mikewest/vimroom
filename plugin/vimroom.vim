@@ -178,11 +178,15 @@ function! <SID>VimroomToggle()
       if g:vimroom_sidebar_height
         " Create the top sidebar
         exec('silent leftabove ' . g:vimroom_sidebar_height . 'split new')
+        set nu
+        set nonu
         setlocal noma
         set nocursorline
         wincmd j
         " Create the bottom sidebar
         exec('silent rightbelow ' . g:vimroom_sidebar_height . 'split new')
+        set nu
+        set nonu
         setlocal noma
         set nocursorline
         wincmd k
