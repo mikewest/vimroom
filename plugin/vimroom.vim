@@ -60,6 +60,11 @@ if !exists( "g:vimroom_navigation_keys" )
     let g:vimroom_navigation_keys = 1
 endif
 
+" Should Vimroom turn off line number.  Defaults to no
+if !exists( "g:vimroom_no_line_number" )
+    let g:vimroom_no_line_number = 0
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Code
 "
@@ -203,8 +208,10 @@ function! <SID>VimroomToggle()
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
-            set nonumber
-            set norelativenumber
+            if g:vimroom_no_line_number
+                set nonumber
+                set norelativenumber
+            endif
             if s:save_textwidth != ""
                 exec( "set textwidth=".g:vimroom_width )
             endif
