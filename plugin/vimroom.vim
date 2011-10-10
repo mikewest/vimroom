@@ -60,6 +60,14 @@ if !exists( "g:vimroom_navigation_keys" )
     let g:vimroom_navigation_keys = 1
 endif
 
+" Should Vimroom clear line numbers from the Vimroomed buffer?  Defaults to `1`
+" (on). Set to `0` if you'd prefer Vimroom to leave line numbers untouched.
+" (Note that setting this to `0` will not turn line numbers on if they aren't
+" on already).
+if !exists( "g:vimroom_clear_line_numbers" )
+    let g:vimroom_clear_line_numbers = 1
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Code
 "
@@ -238,8 +246,10 @@ function! <SID>VimroomToggle()
             " Setup wrapping, line breaking, and push the cursor down
             set wrap
             set linebreak
-            set nonumber
-            set norelativenumber
+            if g:vimroom_clear_line_numbers
+                set nonumber
+                set norelativenumber
+            endif
             if s:save_textwidth != ""
                 exec( "set textwidth=".g:vimroom_width )
             endif
