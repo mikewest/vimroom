@@ -127,36 +127,54 @@ endfunction
 " Save current buffer name
 let b:vimroom_bufname = expand("%:t")
 " Close padding buffer if we quit current buffer
-autocmd BufHidden <buffer> bw | call s:close_padding()
+autocmd BufHidden <buffer> call s:close_padding()
 
 function! s:close_padding()
-  " Save buffer list
-  redir => buflist
-  silent ls!
-  redir END
+  " Try to close current buffer and related padding buffers
+  try
+    " Unload current buffer
+    bdelete
+    " Save buffer list
+    redir => buflist
+    silent ls
+    redir END
 
-  let has_other_buf = 0
+    let has_other_buf = 0
 
-  " Is there other buffer open?
-  for buf in split(buflist, "\n")
-    if match(buf, '_RoomPadding') == -1
-      let has_other_buf = 1
-      break
+    " Is there other buffer open?
+    for buf in split(buflist, "\n")
+      if match(buf, '_RoomPadding') == -1
+        let has_other_buf = 1
+        break
+      endif
+    endfor
+
+    if has_other_buf
+      " If there is other buffer existing,
+      " we close padding buffer first.
+      bwipeout _RoomPadding
+      " Initialize environment for other buffer
+      let b:vimroom_bufname = expand("%:t")
+      let s:active = 0
+      autocmd BufHidden <buffer> call s:close_padding()
+    else
+      " Otherwise, we just quit vim
+      qa
     endif
-  endfor
+  catch
+    " XXX It is not the best solution, but I have no other better solutions.
+    " If the current buffer has been changed, and we didn't save it before
+    " we quit, we would be in here.
 
-  if has_other_buf
-    " If there is other buffer existing,
-    " we close padding buffer first.
-    bd RoomPadding
-    " Initialize environment for other buffer
-    let b:vimroom_bufname = expand("%:t")
-    let s:active = 0
-    autocmd BufHidden <buffer> bw | call s:close_padding()
-  else
-    " Otherwise, we just quit vim
-    qa
-  endif
+    " Close padding buffers
+    bwipeout _RoomPadding
+
+    " Show errors and warnings
+    let exc = substitute(v:exception, 'Vim([a-z]*):', '', '')
+		echohl ErrorMsg | echo exc | echohl None
+		echohl WarningMsg | echo "You are in a weird dimension." | echohl None
+		echohl WarningMsg | echo "The best thing you should do now is save and quit." | echohl None
+  endtry
 endfunction
 
 function! <SID>VimroomToggle()
@@ -177,28 +195,28 @@ function! <SID>VimroomToggle()
         endif
         " Reset color scheme (or clear new colors, if no scheme is set)
         if s:scheme != ""
-            exec( "colorscheme " . s:scheme ) 
+          exec( "colorscheme " . s:scheme ) 
         else
-            hi clear
+          hi clear
         endif
         if s:save_t_mr != ""
-            exec( "set t_mr=" .s:save_t_mr )
+          exec( "set t_mr=" .s:save_t_mr )
         endif
         " Reset `scrolloff` and `laststatus`
         if s:save_scrolloff != ""
-            exec( "set scrolloff=" . s:save_scrolloff )
+          exec( "set scrolloff=" . s:save_scrolloff )
         endif
         if s:save_laststatus != ""
-            exec( "set laststatus=" . s:save_laststatus )
+          exec( "set laststatus=" . s:save_laststatus )
         endif
         if s:save_textwidth != ""
-            exec( "set textwidth=" . s:save_textwidth )
+          exec( "set textwidth=" . s:save_textwidth )
         endif
         if s:save_number != 0
-            set number
+          set number
         endif
         if s:save_relativenumber != 0
-            set relativenumber
+          set relativenumber
         endif
         " Remove wrapping and linebreaks
         set nowrap
