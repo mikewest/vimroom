@@ -287,6 +287,8 @@ function! <SID>VimroomToggle()
             exec( "hi StatusLineNC " . l:highlightfgbgcolor )
             set t_mr=""
             set fillchars+=vert:\ 
+            " Sometimes user would change colorscheme when they are in room
+            autocmd ColorScheme <buffer> let s:scheme = g:colors_name
         endif
     endif
 endfunction
