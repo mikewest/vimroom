@@ -127,6 +127,9 @@ endfunction
 function! <SID>VimroomToggle()
     if s:active == 1
         let s:active = 0
+        " unset sidebar-click disabling
+        autocmd! WinEnter *
+
         " Close all other split windows
         if g:vimroom_sidebar_height
             wincmd j
@@ -221,6 +224,9 @@ function! <SID>VimroomToggle()
             if s:save_scrolloff != ""
                 exec( "set scrolloff=".g:vimroom_scrolloff )
             endif
+            
+            " clicking on any of the sidebar windows returns cursor to main window
+            autocmd! WinEnter * wincmd p
 
             " Setup navigation over "display lines", not "logical lines" if
             " mappings for the navigation keys don't already exist.
