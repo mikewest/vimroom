@@ -113,6 +113,9 @@ if exists ( "&relativenumber" )
     let s:save_relativenumber = &relativenumber
 endif
 
+" Get the ID of the buffer we're working in
+let s:mainbufnr = bufnr("%")
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -226,7 +229,8 @@ function! <SID>VimroomToggle()
             endif
             
             " clicking on any of the sidebar windows returns cursor to main window
-            autocmd! WinEnter * wincmd p
+            let s:mainbufwin = bufwinnr(s:mainbufnr)
+            autocmd! WinEnter * exe s:mainbufwin . "wincmd w"
 
             " Setup navigation over "display lines", not "logical lines" if
             " mappings for the navigation keys don't already exist.
