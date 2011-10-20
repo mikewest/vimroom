@@ -184,14 +184,14 @@ function! <SID>VimroomToggle()
             endif
             if g:vimroom_min_sidebar_width
                 " Create the left sidebar
-                exec( "silent leftabove " . s:sidebar . "vsplit new" )
+                exec( "silent leftabove " . s:sidebar . "vnew" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
                 setlocal norelativenumber
                 wincmd l
                 " Create the right sidebar
-                exec( "silent rightbelow " . s:sidebar . "vsplit new" )
+                exec( "silent rightbelow " . s:sidebar . "vnew" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
@@ -200,14 +200,14 @@ function! <SID>VimroomToggle()
             endif
             if g:vimroom_sidebar_height
                 " Create the top sidebar
-                exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
+                exec( "silent leftabove " . g:vimroom_sidebar_height . "new" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
                 setlocal norelativenumber
                 wincmd j
                 " Create the bottom sidebar
-                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
+                exec( "silent rightbelow " . g:vimroom_sidebar_height . "new" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
