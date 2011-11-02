@@ -182,18 +182,14 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
-                if exists("&relativenumber")
-                    setlocal norelativenumber
-                endif
+                silent! setlocal norelativenumber
                 wincmd l
                 " Create the right sidebar
                 exec( "silent rightbelow " . s:sidebar . "vsplit new" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
-                if exists("&relativenumber")
-                    setlocal norelativenumber
-                endif
+                silent! setlocal norelativenumber
                 wincmd h
             endif
             if g:vimroom_sidebar_height
@@ -202,18 +198,14 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
-                if exists("&relativenumber")
-                    setlocal norelativenumber
-                endif
+                silent! setlocal norelativenumber
                 wincmd j
                 " Create the bottom sidebar
                 exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
-                if exists("&relativenumber")
-                    setlocal norelativenumber
-                endif
+                silent! setlocal norelativenumber
                 wincmd k
             endif
             " Setup wrapping, line breaking, and push the cursor down
@@ -221,9 +213,7 @@ function! <SID>VimroomToggle()
             set linebreak
             if g:vimroom_clear_line_numbers
                 set nonumber
-                if exists('&relativenumber')
-                    set norelativenumber
-                endif
+                silent! set norelativenumber
             endif
             if s:save_textwidth != ""
                 exec( "set textwidth=".g:vimroom_width )
