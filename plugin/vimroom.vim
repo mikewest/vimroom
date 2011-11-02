@@ -1,3 +1,4 @@
+
 "==============================================================================
 "File:        vimroom.vim
 "Description: Vaguely emulates a writeroom-like environment in Vim by
@@ -35,9 +36,9 @@ if !exists( "g:vimroom_sidebar_height" )
     let g:vimroom_sidebar_height = 3
 endif
 
-" The GUI background color.  Defaults to "black"
-if !exists( "g:vimroom_guibackground" )
-    let g:vimroom_guibackground = "black"
+" Override background color
+if exists( "g:vimroom_guibackground_override" )
+  let g:vimroom_guibackground = g:vimroom_guibackground_override
 endif
 
 " The cterm background color.  Defaults to "bg"
@@ -72,52 +73,86 @@ endif
 " Plugin Code
 "
 
-" Given the desired column width, and minimum sidebar width, determine
-" the minimum window width necessary for splitting to make sense
-let s:minwidth = g:vimroom_width + ( g:vimroom_min_sidebar_width * 2 )
+  " Given the desired column width, and minimum sidebar width, determine
+  " the minimum window width necessary for splitting to make sense
+  let s:minwidth = g:vimroom_width + ( g:vimroom_min_sidebar_width * 2 )
 
-" Save the current color scheme for reset later
-let s:scheme = ""
-if exists( "g:colors_name" )
-    let s:scheme = g:colors_name
-endif
-if exists( "&t_mr" )
+  if exists( "&t_mr" )
     let s:save_t_mr = &t_mr
-end
+  end
 
-" Save the current scrolloff value for reset later
-let s:save_scrolloff = ""
-if exists( "&scrolloff" )
+function! Savestatus()
+  " Save the current color scheme for reset later
+  let s:scheme = ""
+  if exists( "g:colors_name" )
+    let s:scheme = g:colors_name
+  endif
+  " Save the current scrolloff value for reset later
+  let s:save_scrolloff = ""
+  if exists( "&scrolloff" )
     let s:save_scrolloff = &scrolloff
-end
+  end
 
-" Save the current `laststatus` value for reset later
-let s:save_laststatus = ""
-if exists( "&laststatus" )
+  " Save the current `laststatus` value for reset later
+  let s:save_laststatus = ""
+  if exists( "&laststatus" )
     let s:save_laststatus = &laststatus
-endif
+  endif
 
-" Save the current `textwidth` value for reset later
-let s:save_textwidth = ""
-if exists( "&textwidth" )
+  " Save the current `textwidth` value for reset later
+  let s:save_textwidth = ""
+  if exists( "&textwidth" )
     let s:save_textwidth = &textwidth
-endif
+  endif
 
-" Save the current `number` and `relativenumber` values for reset later
-let s:save_number = 0
-let s:save_relativenumber = 0
-if exists( "&number" )
+  " Save the current `wrap` value for reset later
+  let s:save_wrap = 0
+  if exists( "&wrap" )
+    let s:save_wrap = &wrap
+  endif
+
+  " Save the current `linebreak` value for reset later
+  let s:save_linebreak = 0
+  if exists( "&linebreak" )
+    let s:save_linebreak = &linebreak
+  endif
+
+  " Save the current `number` and `relativenumber` values for reset later
+  let s:save_number = 0
+  let s:save_relativenumber = 0
+  if exists( "&number" )
     let s:save_number = &number
-endif
-if exists ( "&relativenumber" )
+  endif
+  if exists ( "&relativenumber" )
     let s:save_relativenumber = &relativenumber
-endif
+  endif
+endfu 
+
+" Get the current background color
+function! Getbgcolor()
+  redir => s:currentcolors
+  silent highlight Normal
+  redir END
+  let s:findguibg = matchstr(s:currentcolors, "guibg=\\S\\+")
+  let s:findctermbg = matchstr(s:currentcolors, 'ctermbg=\\S\\+')
+  if !empty(s:findguibg)
+    let s:bglist = split(s:findguibg,'=')
+    let s:bg = s:bglist[1]
+  elseif !empty(g:findctermbg)
+    let s:bglist = split(s:findctermbg,'=')
+    let s:bg = s:bglist[1]
+  else
+    let s:bg = 'black'
+  endif
+  return s:bg
+endfu
 
 " Get the ID of the buffer we're working in
 let s:mainbufnr = bufnr("%")
 
 " We're currently in nonvimroomized state
 let s:active   = 0
+silent call Savestatus()
 
 function! s:is_the_screen_wide_enough()
     return winwidth( winnr() ) >= s:minwidth
@@ -153,7 +188,7 @@ function! <SID>VimroomToggle()
             hi clear
         endif
         if s:save_t_mr != ""
-            exec( "set t_mr=" .s:save_t_mr )
+            exec( "set t_mr=" . s:save_t_mr )
         endif
         " Reset `scrolloff` and `laststatus`
         if s:save_scrolloff != ""
@@ -165,16 +200,20 @@ function! <SID>VimroomToggle()
         if s:save_textwidth != ""
             exec( "set textwidth=" . s:save_textwidth )
         endif
+        if s:save_linebreak != 0
+            set linebreak
+        endif
+        if s:save_wrap != 0
+            set wrap
+        endif
         if s:save_number != 0
             set number
         endif
         if s:save_relativenumber != 0
             set relativenumber
         endif
-        " Remove wrapping and linebreaks
-        set nowrap
-        set nolinebreak
     else
+      call Savestatus()
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
@@ -247,6 +286,11 @@ function! <SID>VimroomToggle()
                 endtry
             endif
 
+            " The GUI background color
+            if !exists( "g:vimroom_guibackground_override" )
+              let g:vimroom_guibackground = Getbgcolor()
+            endif
+
             " Hide distracting visual elements
             if has('gui_running')
                 let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
@@ -276,3 +320,4 @@ command -nargs=0 VimroomToggle call <SID>VimroomToggle()
 if !hasmapto( '<Plug>VimroomToggle' )
     nmap <silent> <Leader>V <Plug>VimroomToggle
 endif
+
