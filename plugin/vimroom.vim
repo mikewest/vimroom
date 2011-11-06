@@ -1,4 +1,3 @@
-
 "==============================================================================
 "File:        vimroom.vim
 "Description: Vaguely emulates a writeroom-like environment in Vim by
@@ -133,19 +132,13 @@ function! Getbgcolor()
   redir => s:currentcolors
   silent highlight Normal
   redir END
-  let s:findguibg = matchstr(s:currentcolors, "guibg=\\S\\+")
-  let s:findctermbg = matchstr(s:currentcolors, 'ctermbg=\\S\\+')
-  if !empty(s:findguibg)
-    let s:bglist = split(s:findguibg,'=')
-    let s:bg = s:bglist[1]
-  elseif !empty(g:findctermbg)
-    let s:bglist = split(s:findctermbg,'=')
-    let s:bg = s:bglist[1]
+  if match(s:currentcolors, "guibg=\\zs\\S\\+")
+    return matchstr(s:currentcolors, "guibg=\\zs\\S\\+")
+  elseif  match(s:currentcolors, "ctermbg=\\zs\\S\\+")
+    return  matchstr(s:currentcolors, "ctermbg=\\zs\\S\\+")
   else
-    let s:bg = 'black'
-  endif
-  return s:bg
-endfu
+    return 'black'
+  endfu
 
 " Get the ID of the buffer we're working in
 let s:mainbufnr = bufnr("%")
@@ -289,6 +282,8 @@ function! <SID>VimroomToggle()
             " The GUI background color
             if !exists( "g:vimroom_guibackground_override" )
               let g:vimroom_guibackground = Getbgcolor()
+            else
+              let g:vimroom_guibackground = g:vimroom_guibackground_override
             endif
 
             " Hide distracting visual elements
