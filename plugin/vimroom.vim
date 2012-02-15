@@ -182,6 +182,7 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
+                setlocal colorcolumn=0
                 silent! setlocal norelativenumber
                 wincmd l
                 " Create the right sidebar
@@ -189,6 +190,7 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
+                setlocal colorcolumn=0
                 silent! setlocal norelativenumber
                 wincmd h
             endif
@@ -198,6 +200,7 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
+                setlocal colorcolumn=0
                 silent! setlocal norelativenumber
                 wincmd j
                 " Create the bottom sidebar
@@ -205,6 +208,7 @@ function! <SID>VimroomToggle()
                 setlocal noma
                 setlocal nocursorline
                 setlocal nonumber
+                setlocal colorcolumn=0
                 silent! setlocal norelativenumber
                 wincmd k
             endif
@@ -250,6 +254,8 @@ function! <SID>VimroomToggle()
             exec( "hi NonText " . l:highlightfgbgcolor )
             exec( "hi StatusLine " . l:highlightfgbgcolor )
             exec( "hi StatusLineNC " . l:highlightfgbgcolor )
+            " disable colored column marker
+            setlocal colorcolumn=0
             set t_mr=""
             set fillchars+=vert:\ 
         endif
