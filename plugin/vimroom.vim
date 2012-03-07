@@ -166,10 +166,11 @@ function! <SID>VimroomToggle()
             set relativenumber
         endif
         " Remove wrapping and linebreaks
-        set nowrap
+        exe 'set '. (s:save_wrap == 1 ? '' : 'no') 'wrap'
         set nolinebreak
     else
         if s:is_the_screen_wide_enough()
+            let s:save_wrap = &wrap
             let s:active = 1
             let s:sidebar = s:sidebar_size()
             " Turn off status bar
