@@ -242,7 +242,7 @@ function! <SID>VimroomToggle()
                 let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
                 let l:highlightfgbgcolor = "guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor
             else
-                let l:highlightbgcolor = "ctermbg=" . g:vimroom_guibackground
+                let l:highlightbgcolor = "ctermbg=" . g:vimroom_ctermbackground
                 let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " " . l:highlightbgcolor
             endif
             exec( "hi Normal " . l:highlightbgcolor )
