@@ -97,6 +97,19 @@ if exists( "&laststatus" )
     let s:save_laststatus = &laststatus
 endif
 
+" Save the current 'colorcolumn' value for reset later
+let s:save_colorcolumn = ""
+if exists ( "&colorcolumn" )
+    let s:save_colorcolumn = &colorcolumn
+    set colorcolumn=""
+endif
+
+" Save the current 'foldcolumn' value for reset later
+if exists( "&foldcolumn" )
+    let s:save_foldcolumn = &foldcolumn
+    set foldcolumn=0
+endif
+
 " Save the current `textwidth` value for reset later
 let s:save_textwidth = ""
 if exists( "&textwidth" )
@@ -152,6 +165,12 @@ function! <SID>VimroomToggle()
         " Reset `scrolloff` and `laststatus`
         if s:save_scrolloff != ""
             exec( "set scrolloff=" . s:save_scrolloff )
+        endif
+        if s:save_colorcolumn != ""
+            exec( "set colorcolumn=" . s:save_colorcolumn )
+        endif
+        if s:save_foldcolumn != ""
+            exec( "set foldcolumn=" . s:save_foldcolumn )
         endif
         if s:save_laststatus != ""
             exec( "set laststatus=" . s:save_laststatus )
