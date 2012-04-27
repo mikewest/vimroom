@@ -124,7 +124,18 @@ function! s:sidebar_size()
     return ( winwidth( winnr() ) - g:vimroom_width - 2 ) / 2
 endfunction
 
+function! s:set_up_padding_buffer()
+    setlocal noma
+    setlocal nocursorline
+    setlocal nonumber
+    silent! setlocal norelativenumber
+    setlocal nobuflisted
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
+endfunction
+
 function! <SID>VimroomToggle()
+    let bname = "__vimroom__"
     if s:active == 1
         let s:active = 0
         " Close all other split windows
@@ -139,6 +150,11 @@ function! <SID>VimroomToggle()
             close
             wincmd h
             close
+        endif
+        " Wipeout the temporary buffer that was displayed in the splits
+        let bufnum = bufnr(bname)
+        if bufnum != -1
+            exec( "bwipeout " . bufnum )
         endif
         " Reset color scheme (or clear new colors, if no scheme is set)
         if s:scheme != ""
@@ -178,34 +194,22 @@ function! <SID>VimroomToggle()
             endif
             if g:vimroom_min_sidebar_width
                 " Create the left sidebar
-                exec( "silent leftabove " . s:sidebar . "vsplit new" )
-                setlocal noma
-                setlocal nocursorline
-                setlocal nonumber
-                silent! setlocal norelativenumber
+                exec( "silent leftabove " . s:sidebar . "vsplit " . bname)
+                call s:set_up_padding_buffer()
                 wincmd l
                 " Create the right sidebar
-                exec( "silent rightbelow " . s:sidebar . "vsplit new" )
-                setlocal noma
-                setlocal nocursorline
-                setlocal nonumber
-                silent! setlocal norelativenumber
+                exec( "silent rightbelow " . s:sidebar . "vsplit " . bname)
+                call s:set_up_padding_buffer()
                 wincmd h
             endif
             if g:vimroom_sidebar_height
                 " Create the top sidebar
-                exec( "silent leftabove " . g:vimroom_sidebar_height . "split new" )
-                setlocal noma
-                setlocal nocursorline
-                setlocal nonumber
-                silent! setlocal norelativenumber
+                exec( "silent leftabove " . g:vimroom_sidebar_height . "split " . bname)
+                call s:set_up_padding_buffer()
                 wincmd j
                 " Create the bottom sidebar
-                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split new" )
-                setlocal noma
-                setlocal nocursorline
-                setlocal nonumber
-                silent! setlocal norelativenumber
+                exec( "silent rightbelow " . g:vimroom_sidebar_height . "split " . bname)
+                call s:set_up_padding_buffer()
                 wincmd k
             endif
             " Setup wrapping, line breaking, and push the cursor down
