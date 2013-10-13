@@ -85,6 +85,18 @@ if exists( "&t_mr" )
     let s:save_t_mr = &t_mr
 end
 
+" Save the current `foldcolumn` value for reset later
+let s:save_foldcolumn = ""
+if exists( "&foldcolumn" )
+    let s:save_foldcolumn = &foldcolumn
+endif
+
+" Save the current `colorcolumn` value for reset later
+let s:save_colorcolumn = ""
+if exists( "&colorcolumn" )
+    let s:save_colorcolumn = &colorcolumn
+endif
+
 " Save the current scrolloff value for reset later
 let s:save_scrolloff = ""
 if exists( "&scrolloff" )
@@ -156,6 +168,12 @@ function! <SID>VimroomToggle()
         if s:save_laststatus != ""
             exec( "set laststatus=" . s:save_laststatus )
         endif
+        if s:save_foldcolumn != ""
+            exec( "set foldcolumn=" . s:save_foldcolumn )
+        endif
+        if s:save_colorcolumn != ""
+            exec( "set colorcolumn=" . s:save_colorcolumn)
+        endif
         if s:save_textwidth != ""
             exec( "set textwidth=" . s:save_textwidth )
         endif
@@ -175,6 +193,12 @@ function! <SID>VimroomToggle()
             " Turn off status bar
             if s:save_laststatus != ""
                 setlocal laststatus=0
+            endif
+            if s:save_foldcolumn != ""
+                set foldcolumn=0
+            endif
+            if s:save_colorcolumn != ""
+                set colorcolumn=0
             endif
             if g:vimroom_min_sidebar_width
                 " Create the left sidebar
