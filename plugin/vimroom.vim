@@ -113,6 +113,11 @@ if exists ( "&relativenumber" )
     let s:save_relativenumber = &relativenumber
 endif
 
+" Save `guioptions`
+if exists( "&guioptions" )
+  let s:save_guioptions = &guioptions
+endif
+
 " We're currently in nonvimroomized state
 let s:active   = 0
 
@@ -165,6 +170,9 @@ function! <SID>VimroomToggle()
         if s:save_relativenumber != 0
             set relativenumber
         endif
+        if s:save_guioptions != ""
+          exec( "set guioptions=" . s:save_guioptions )
+        endif
         " Remove wrapping and linebreaks
         set nowrap
         set nolinebreak
@@ -172,6 +180,10 @@ function! <SID>VimroomToggle()
         if s:is_the_screen_wide_enough()
             let s:active = 1
             let s:sidebar = s:sidebar_size()
+
+            " Turn off toolbar
+            set guioptions-=T
+
             " Turn off status bar
             if s:save_laststatus != ""
                 setlocal laststatus=0
