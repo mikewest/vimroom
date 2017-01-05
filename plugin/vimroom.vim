@@ -125,6 +125,10 @@ function! s:sidebar_size()
 endfunction
 
 function! <SID>VimroomToggle()
+    if exists(":AirlineToggle")
+        AirlineToggle
+    endif
+
     if s:active == 1
         let s:active = 0
         " Close all other split windows
