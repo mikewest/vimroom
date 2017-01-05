@@ -125,6 +125,10 @@ function! s:sidebar_size()
 endfunction
 
 function! <SID>VimroomToggle()
+    if exists(":AirlineToggle")
+        AirlineToggle
+    endif
+
     if s:active == 1
         let s:active = 0
         " Close all other split windows
@@ -238,13 +242,8 @@ function! <SID>VimroomToggle()
             endif
 
             " Hide distracting visual elements
-            if has('gui_running')
-                let l:highlightbgcolor = "guibg=" . g:vimroom_guibackground
-                let l:highlightfgbgcolor = "guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor
-            else
-                let l:highlightbgcolor = "ctermbg=" . g:vimroom_ctermbackground
-                let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " " . l:highlightbgcolor
-            endif
+            let l:highlightbgcolor = "ctermbg=" . g:vimroom_ctermbackground . " guibg=" . g:vimroom_guibackground
+            let l:highlightfgbgcolor = "ctermfg=" . g:vimroom_ctermbackground . " guifg=" . g:vimroom_guibackground . " " . l:highlightbgcolor . " " . l:highlightbgcolor
             exec( "hi Normal " . l:highlightbgcolor )
             exec( "hi VertSplit " . l:highlightfgbgcolor )
             exec( "hi NonText " . l:highlightfgbgcolor )
